@@ -5,7 +5,7 @@ import android.view.Surface
 import com.cma.kreels.model.*
 import com.google.android.filament.*
 import com.google.android.filament.gltfio.*
-import com.google.android.filament.utils.KTXLoader
+import com.google.android.filament.utils.KTX1Loader
 import com.google.android.filament.utils.Utils
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -79,8 +79,8 @@ class ReelRenderer(private val ctx: Context) {
         fun col(key: String, d: FloatArray) = cfg?.optJSONArray(key)?.let { a -> FloatArray(3) { a.getDouble(it).toFloat() } } ?: d
         val hasKtx = runCatching { open(env, "ibl.ktx").close(); open(env, "sky.ktx").close() }.isSuccess
         if (hasKtx) {                                   // HDRI-based pack (cmgen output)
-            ibl = KTXLoader.createIndirectLight(engine, direct(open(env, "ibl.ktx")), KTXLoader.Options()).also { it.intensity = 30_000f }
-            sky = KTXLoader.createSkybox(engine, direct(open(env, "sky.ktx")), KTXLoader.Options())
+            ibl = KTX1Loader.createIndirectLight(engine, direct(open(env, "ibl.ktx")), KTX1Loader.Options()).also { it.intensity = 30_000f }
+            sky = KTX1Loader.createSkybox(engine, direct(open(env, "sky.ktx")), KTX1Loader.Options())
         } else {                                        // procedural: flat sky colour + constant ambient (tune intensity on device)
             val s = col("sky", floatArrayOf(0.55f, 0.75f, 0.95f)); val a = col("ambient", floatArrayOf(0.9f, 0.9f, 1f))
             sky = Skybox.Builder().color(s[0], s[1], s[2], 1f).build(engine)

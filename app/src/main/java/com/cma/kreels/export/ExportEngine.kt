@@ -12,6 +12,7 @@ import android.text.TextPaint
 import androidx.media3.common.*
 import androidx.media3.effect.BitmapOverlay
 import androidx.media3.effect.OverlayEffect
+import androidx.media3.effect.TextureOverlay
 import androidx.media3.transformer.*
 import com.cma.kreels.model.ReelSpec
 import com.cma.kreels.model.TextClip
@@ -109,7 +110,7 @@ class ExportEngine(private val ctx: Context, private val renderer: ReelRenderer)
                 val overlays = spec.texts.map { TimedText(it) }
                 val videoItem = EditedMediaItem.Builder(MediaItem.fromUri(Uri.fromFile(video)))
                     .setRemoveAudio(true)
-                    .setEffects(Effects(emptyList(), if (overlays.isEmpty()) emptyList() else listOf(OverlayEffect(ImmutableList.copyOf(overlays)))))
+                    .setEffects(Effects(emptyList(), if (overlays.isEmpty()) emptyList() else listOf(OverlayEffect(ImmutableList.copyOf<TextureOverlay>(overlays)))))
                     .build()
                 val sequences = mutableListOf(EditedMediaItemSequence.Builder(videoItem).build())
                 spec.audioUri?.let { a ->
